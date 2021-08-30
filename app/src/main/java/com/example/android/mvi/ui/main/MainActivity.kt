@@ -1,9 +1,9 @@
-package com.example.android.mvi
+package com.example.android.mvi.ui.main
 
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.android.mvi.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

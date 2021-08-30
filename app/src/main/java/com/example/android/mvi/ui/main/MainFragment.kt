@@ -1,8 +1,9 @@
-package com.example.android.mvi
+package com.example.android.mvi.ui.main
 
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.example.android.mvi.R
 
 class MainFragment : Fragment() {
 
