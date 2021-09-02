@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 ///object makes it a singleton
 object RetrofitBuilder {
 
-    const val BASE_URL = "open-api.xyz/"
+    const val BASE_URL: String = "https://open-api.xyz"
     //by lazy means only once it will be instanstiated
     val retrofitBuilder: Retrofit.Builder by lazy {
         Retrofit.Builder()

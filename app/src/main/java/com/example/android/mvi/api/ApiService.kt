@@ -9,12 +9,12 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    @GET("/placeholder/user/{userId}")
+    @GET("placeholder/user/{userId}")
     fun getUser(
         @Path("userId") userId: String
     ): LiveData<GenericApiResponse<User>>
 
-    @GET("/placeholder/blogs")
+    @GET("placeholder/blogs")
     fun getBlogPosts(
     ): LiveData<GenericApiResponse<List<Blogs>>>
 }

@@ -1,17 +1,20 @@
 package com.example.android.mvi.ui.main
 
+import android.text.style.ReplacementSpan
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.android.mvi.model.Blogs
 import com.example.android.mvi.model.User
+import com.example.android.mvi.repository.Repository
 import com.example.android.mvi.ui.main.state.MainStateEvent
 import com.example.android.mvi.ui.main.state.MainViewState
 import com.example.android.mvi.ui.main.state.MainStateEvent.GetBlogPostsEvent
 import com.example.android.mvi.ui.main.state.MainStateEvent.GetUserEvent
 import com.example.android.mvi.ui.main.state.MainStateEvent.None
 import com.example.android.mvi.util.AbsentLiveData
+import com.example.android.mvi.util.DataState
 
 class MainViewModel : ViewModel() {
 
@@ -22,21 +25,21 @@ class MainViewModel : ViewModel() {
     val viewState: LiveData<MainViewState>
         get() = _viewState
 
-    val dataState: LiveData<MainViewState> = Transformations
+    val dataState: LiveData<DataState<MainViewState>> = Transformations
         .switchMap(_stateEvent){stateEvent ->
             stateEvent?.let {
                 handleStateEvent(stateEvent)
             }
         }
 
-    fun handleStateEvent(stateEvent: MainStateEvent): LiveData<MainViewState> {
+    fun handleStateEvent(stateEvent: MainStateEvent): LiveData<DataState<MainViewState>> {
         when (stateEvent) {
             is GetBlogPostsEvent -> {
-                return AbsentLiveData.create()
+                return Repository.getBlogPosts()
             }
 
             is GetUserEvent -> {
-                return AbsentLiveData.create()
+                return Repository.getUser(stateEvent.userId)
             }
 
             is None -> {
@@ -66,8 +69,11 @@ class MainViewModel : ViewModel() {
         return value
     }
 
+//
     fun setStateEvent(event: MainStateEvent){
-        _stateEvent.value = event
+        val state: MainStateEvent
+        state = event
+        _stateEvent.value = state
     }
 
 }
