@@ -3,17 +3,23 @@ package com.example.android.mvi.ui.main
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.mvi.R
+import com.example.android.mvi.model.Blogs
 import com.example.android.mvi.ui.main.state.MainStateEvent
+import kotlinx.android.synthetic.main.fragment_main.*
 import java.lang.ClassCastException
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(),
+BlogListAdapter.Interaction{
 
     lateinit var viewModel: MainViewModel
     lateinit var dataStateHandler: DataStateListener
+    lateinit var blogListAdapter: BlogListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +38,16 @@ class MainFragment : Fragment() {
         }?: throw Exception("Invalid Activity")
 
         subscribeObservers()
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView(){
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(activity)
+            blogListAdapter = BlogListAdapter(this@MainFragment)
+            adapter = blogListAdapter
+
+        }
     }
 
     fun subscribeObservers(){
@@ -44,15 +60,17 @@ class MainFragment : Fragment() {
 
 
             //handles data
-            dataState.data?.let { mainViewState ->
-                mainViewState.blogPost?.let{blogPosts ->
-                    //set blogPosts
-                    viewModel.setBlogListData(blogPosts)
+            dataState.data?.let { event ->
+                event.getContentIfNotHandled()?.let {mainViewState ->
+                    mainViewState.blogPost?.let { blogPosts ->
+                        //set blogPosts
+                        viewModel.setBlogListData(blogPosts)
 
-                }
-                mainViewState.users?.let{user ->
-                    //set user
-                    viewModel.setUser(user)
+                    }
+                    mainViewState.users?.let { user ->
+                        //set user
+                        viewModel.setUser(user)
+                    }
                 }
                 
             }
@@ -105,5 +123,10 @@ class MainFragment : Fragment() {
         }catch(e: ClassCastException){
             println("Debug: $context must implement DataStateListener")
         }
+    }
+
+    override fun onItemSelected(position: Int, item: Blogs) {
+        println("DEBUG: clicked on item $position")
+        println("DEBUG: clicked on item $item")
     }
 }
