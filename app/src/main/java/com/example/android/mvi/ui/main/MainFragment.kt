@@ -81,6 +81,7 @@ BlogListAdapter.Interaction{
             viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
                 viewState.blogPost?.let {
                     println("DEBUG: Setting blog posts to RecyclerView: ${it}")
+                    blogListAdapter.submitList(it)
                 }
 
                 viewState.users?.let {
